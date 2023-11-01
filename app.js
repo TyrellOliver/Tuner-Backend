@@ -16,4 +16,8 @@ app.get('/',(req,res)=>{
     res.send(`Welcome to the server!`)
 })
 
+app.get("*", (req, res) => {
+    res.status(404).send("Page not found");
+  });
+
 module.exports = app;
