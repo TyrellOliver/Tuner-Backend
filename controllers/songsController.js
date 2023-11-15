@@ -14,7 +14,7 @@ const {
   checkBoolean,
 } = require("../validations/checkSongs");
 
-// GET all songs
+// Getting all songs
 // localhost:3001/songs/
 songs.get("/", async (req, res) => {
   const allSongs = await getAllSongs();
@@ -25,6 +25,7 @@ songs.get("/", async (req, res) => {
   }
 });
 
+// Getting one song
 songs.get("/:id", async (req, res) => {
   const { id } = req.params;
   const oneSong = await getOneSong(id);
@@ -35,12 +36,14 @@ songs.get("/:id", async (req, res) => {
   }
 });
 
+// Creating one song
 songs.post("/", checkName, checkArtist, checkBoolean, async (req, res) => {
   const body = req.body;
   const newSong = await createSong(body);
   res.status(200).json(newSong);
 });
 
+// Deleting one song
 songs.delete("/:id", async (req, res) => {
   const { id } = req.params;
   const deletedSong = await deleteSong(id);
@@ -51,6 +54,7 @@ songs.delete("/:id", async (req, res) => {
   }
 });
 
+// Updating a song
 songs.put("/:id", checkName, checkArtist, checkBoolean, async (req, res) => {
   const { id } = req.params;
   const body = req.body;
