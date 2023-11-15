@@ -8,6 +8,12 @@ const {
   updateSong,
 } = require("../queries/song");
 
+const {
+  checkName,
+  checkArtist,
+  checkBoolean,
+} = require("../validations/checkSongs");
+
 // GET all songs
 // localhost:3001/songs/
 songs.get("/", async (req, res) => {
@@ -29,7 +35,7 @@ songs.get("/:id", async (req, res) => {
   }
 });
 
-songs.post("/", async (req, res) => {
+songs.post("/", checkName, checkArtist, checkBoolean, async (req, res) => {
   const body = req.body;
   const newSong = await createSong(body);
   res.status(200).json(newSong);
@@ -45,7 +51,7 @@ songs.delete("/:id", async (req, res) => {
   }
 });
 
-songs.put("/:id", async (req, res) => {
+songs.put("/:id", checkName, checkArtist, checkBoolean, async (req, res) => {
   const { id } = req.params;
   const body = req.body;
   const updatedSong = await updateSong(id, body);
