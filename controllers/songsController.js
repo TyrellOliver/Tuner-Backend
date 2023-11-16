@@ -14,12 +14,35 @@ const {
   checkBoolean,
 } = require("../validations/checkSongs");
 
+// This handles all the req queries
+const queries = async (req, res, next) => {
+  const { order, is_favorite } = req.query;
+  let allSongs = await getAllSongs();
+  // console.log(allSongs);
+  if (order === "asc") {
+    allSongs.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (order === "desc") {
+    allSongs.sort((a, b) => b.name.localeCompare(a.name));
+  }
+
+  if (is_favorite !== undefined) {
+    const isFavorite = is_favorite.toLowerCase() === "true";
+    allSongs = allSongs.filter((song) => song.is_favorite === isFavorite);
+  }
+
+  res.sortedSongs = allSongs;
+  next();
+};
+
 // Getting all songs
 // localhost:3001/songs/
-songs.get("/", async (req, res) => {
-  const allSongs = await getAllSongs();
-  if (allSongs) {
-    res.status(200).json(allSongs);
+songs.get("/", queries, async (req, res) => {
+  console.log("This is the query string: ", req.query);
+
+  // const allSongs = await getAllSongs();
+
+  if (res.sortedSongs) {
+    res.status(200).json(res.sortedSongs);
   } else {
     res.status(500).json({ error: "Server Error" });
   }
