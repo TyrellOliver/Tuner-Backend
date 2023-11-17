@@ -20,6 +20,9 @@ const queries = async (req, res, next) => {
   let allSongs = await getAllSongs();
   // console.log(allSongs);
   if (order === "asc") {
+    // I got the localeCompare from ChatGPT
+    // Simple Compareison(a < b) works will for english but may not handle special characters or words with accents
+    // localeCompare() handles special characters, accents, 
     allSongs.sort((a, b) => a.name.localeCompare(b.name));
   } else if (order === "desc") {
     allSongs.sort((a, b) => b.name.localeCompare(a.name));
